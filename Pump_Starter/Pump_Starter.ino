@@ -63,8 +63,13 @@ void loop() {
   Start_min = t.min;
 
   int Total_on_time = checkOnPotValue();
+  Serial.print("POT ON Value ");
+  Serial.println(Total_on_time);
 
   Present_time_in_min = (Start_hour * 60) + Start_min;
+
+  Serial.print("Present Time ");
+  Serial.println(Present_time_in_min);
 
   Time_Till_Pump_On = Present_time_in_min + Total_on_time;
 
@@ -84,8 +89,10 @@ void loop() {
     Start_hour = t.hour;
     Start_min = t.min;
     Present_time_in_min = (Start_hour * 60) + Start_min;
+
     Serial.print("Present On Time:");
     Serial.println(Present_time_in_min);
+
     if (Present_time_in_min == 0)
     {
       Time_Till_Pump_On = Extra_time;
@@ -94,9 +101,27 @@ void loop() {
     {
       OnPump = false;
     }
+    delay(10000);
   }
+
   int Total_off_time = checkOffPotValue();
+
+  Serial.print("POT OFF Value ");
+  Serial.println(Total_off_time);
+
+  t = rtc.getTime();
+  Start_hour = t.hour;
+  Start_min = t.min;
+  Present_time_in_min = (Start_hour * 60) + Start_min;
+
+  Serial.print("Present Time ");
+  Serial.println(Present_time_in_min);
+
   Time_Till_Pump_Off = Present_time_in_min + Total_off_time;
+
+  Serial.print("Time_Till_Pump_Off ");
+  Serial.println(Time_Till_Pump_Off);
+
   if (Time_Till_Pump_Off > 1439)
   {
     Extra_time = Time_Till_Pump_On - 1439;
@@ -122,6 +147,7 @@ void loop() {
     }
     Serial.print("Present Off Time:");
     Serial.println(Present_time_in_min);
+    delay(10000);
   }
 }
 int checkOnPotValue()
@@ -139,16 +165,16 @@ int checkOnPotValue()
   }
   else if (runpot >= 30 && runpot <= 63)
   {
-    
+
     return 15;
     //Serial.println("15min");
   }
-  else if (runpot >= 64 && runpot <= 96)
+  else if (runpot >= 64 && runpot <= 98)
   {
     return 30;
     //Serial.println("30min");
   }
-  else if (runpot >= 97 && runpot <= 100)
+  else if (runpot >= 99 && runpot <= 100)
   {
     return 60;
     //Serial.println("1Hr");
